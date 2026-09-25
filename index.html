@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guðmundr — better iðeas · grown organic</title>
+<meta name="description" content="Guðmundr — better iðeas · grown organic. Application portfolio: Wipro EPM · family kingdom-building · career optionality · shared substrate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --background: #FFFFFF;
+  --surface: #F5F5F5;
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --text-muted: #999999;
+  --text-light: #BBBBBB;
+  --accent-heritage: #385E3F;
+  --accent-warm: #D94927;
+  --border: #E3E4E5;
+  --error: #DB3232;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+  --font-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+[data-theme="dark"] {
+  --background: #000000;
+  --surface: #111111;
+  --text-primary: #FFFFFF;
+  --text-secondary: #CCCCCC;
+  --text-muted: #666666;
+  --text-light: #444444;
+  --accent-heritage: #A1BFA6;
+  --border: #333333;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: var(--font-sans); font-weight: 300;
+  background: var(--background); color: var(--text-primary);
+  line-height: 1.6; min-height: 100vh;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+::selection { background: var(--accent-heritage); color: var(--background); }
+
+.theme-toggle {
+  position: fixed; top: var(--space-md); right: var(--space-md);
+  z-index: 1000;
+  background: var(--background); color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-mono); font-size: 0.68rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.theme-toggle:hover { color: var(--accent-warm); border-color: var(--accent-warm); }
+.theme-toggle:focus { outline: none; color: var(--accent-heritage); border-color: var(--accent-heritage); }
+.theme-toggle .tt-current { font-weight: 600; color: var(--text-primary); margin-right: var(--space-xs); }
+.theme-toggle:hover .tt-current { color: var(--accent-warm); }
+
+.pin-gate {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: var(--space-lg);
+  background: var(--background);
+}
+.pin-gate .brand-line {
+  font-family: var(--font-serif); font-weight: 400;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  color: var(--text-primary);
+  letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1;
+}
+.pin-gate .brand-line .eth { color: var(--accent-heritage); }
+.pin-gate .sub-line {
+  font-family: var(--font-serif); font-style: italic; font-weight: 400;
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  color: var(--text-secondary);
+  margin-bottom: 40px; text-align: center;
+  min-height: 1.6em;
+  opacity: 0;   /* start invisible · JS applies transitions per cycle */
+}
+.pin-gate .sub-line .eth { color: var(--accent-heritage); font-weight: 500; }
+.pin-gate form {
+  display: flex; flex-direction: column; gap: 14px;
+  width: 100%; max-width: 320px;
+}
+.pin-gate label {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--text-muted); font-weight: 400;
+}
+.pin-gate input {
+  font-family: var(--font-mono); font-size: 1.1rem;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  background: var(--surface); color: var(--text-primary);
+  letter-spacing: 0.2em; text-align: center;
+  transition: border-color 0.2s;
+}
+.pin-gate input:focus { outline: none; border-color: var(--accent-heritage); }
+.pin-gate button {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  font-weight: 600; letter-spacing: 0.14em;
+  padding: 14px 20px;
+  background: var(--text-primary); color: var(--background);
+  border: 1px solid var(--text-primary);
+  cursor: pointer; text-transform: uppercase;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.pin-gate button:hover { background: var(--accent-warm); border-color: var(--accent-warm); color: #fff; }
+.pin-gate .msg {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  color: var(--text-secondary); text-align: center;
+  min-height: 20px; margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+.pin-gate .msg.err { color: var(--error); }
+.pin-gate.shake { animation: shake 0.4s; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-6px); }
+  40%,80% { transform: translateX(6px); }
+}
+.pin-gate .footer-note {
+  position: absolute; bottom: 32px;
+  text-align: center; font-family: var(--font-sans); font-size: 0.75rem;
+  color: var(--text-muted); letter-spacing: 0.03em;
+}
+.pin-gate .footer-note a, .pin-gate .footer-note button.link {
+  color: var(--text-secondary); text-decoration: none;
+  border: none; background: none; padding: 0 0 1px;
+  border-bottom: 1px solid var(--border);
+  font: inherit; cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.pin-gate .footer-note a:hover, .pin-gate .footer-note button.link:hover {
+  color: var(--accent-warm); border-bottom-color: var(--accent-warm);
+}
+
+/* === REQUEST-ACCESS MODAL (pre-PIN visible) === */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  z-index: 200; display: none;
+  align-items: center; justify-content: center;
+  padding: var(--space-lg);
+}
+[data-theme="dark"] .modal-backdrop { background: rgba(0,0,0,0.75); }
+.modal-backdrop.open { display: flex; }
+.modal-card {
+  background: var(--background); border: 1px solid var(--border);
+  padding: var(--space-lg);
+  width: 100%; max-width: 480px;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-card h2 {
+  font-family: var(--font-serif); font-size: 1.5rem;
+  color: var(--text-primary); margin-bottom: 0.4rem; font-weight: 500;
+}
+.modal-card h2 .eth { color: var(--accent-heritage); }
+.modal-card .modal-sub {
+  font-family: var(--font-serif); font-style: italic; font-weight: 400;
+  color: var(--text-secondary); font-size: 1rem;
+  margin-bottom: 1.5rem; line-height: 1.55;
+}
+.modal-card .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+.modal-card label {
+  font-family: var(--font-mono); font-size: 0.65rem;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--text-muted); font-weight: 400;
+}
+.modal-card input, .modal-card select, .modal-card textarea {
+  font-family: var(--font-sans); font-weight: 300; font-size: 0.95rem;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  background: var(--surface); color: var(--text-primary);
+}
+.modal-card input:focus, .modal-card select:focus, .modal-card textarea:focus {
+  outline: none; border-color: var(--accent-heritage);
+}
+.modal-card textarea { min-height: 80px; resize: vertical; }
+.modal-card .field-help {
+  font-family: var(--font-serif); font-style: italic;
+  font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;
+}
+.modal-card .modal-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+.modal-card .modal-actions .btn { flex: 1; justify-content: center; padding: 10px 16px; }
+.modal-card .oauth-alt {
+  margin-top: 1rem; padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.modal-card .oauth-alt p {
+  font-family: var(--font-serif); font-style: italic;
+  font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.6rem;
+}
+.modal-card .oauth-alt .google-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 8px 14px;
+  background: transparent; color: var(--text-primary);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 0.75rem;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  text-decoration: none; cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.modal-card .oauth-alt .google-btn:hover { border-color: var(--accent-warm); color: var(--accent-warm); }
+.modal-card .success-state { text-align: center; padding: 1rem 0; }
+.modal-card .success-state svg {
+  width: 48px; height: 48px; color: var(--accent-heritage);
+  margin-bottom: 0.75rem;
+}
+.modal-card .success-state h3 {
+  font-family: var(--font-serif); font-size: 1.3rem;
+  color: var(--text-primary); margin-bottom: 0.4rem; font-weight: 500;
+}
+.modal-card .success-state p {
+  font-family: var(--font-serif); font-size: 1rem;
+  color: var(--text-secondary); line-height: 1.55;
+}
+.modal-card .err {
+  font-family: var(--font-serif); font-style: italic;
+  color: var(--error); font-size: 0.9rem; margin-top: 0.4rem;
+}
+.btn {
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 400;
+  padding: 0.55rem 1rem;
+  text-decoration: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  border: 1px solid transparent;
+  text-transform: uppercase; letter-spacing: 0.14em;
+}
+.btn-primary {
+  background: var(--text-primary); color: var(--background);
+  border-color: var(--text-primary);
+}
+.btn-primary:hover { background: var(--accent-warm); border-color: var(--accent-warm); color: #fff; }
+.btn-secondary {
+  background: transparent; color: var(--text-secondary);
+  border-color: var(--border);
+}
+.btn-secondary:hover { border-color: var(--accent-warm); color: var(--accent-warm); }
+</style>
+</head>
+<body>
+
+<button type="button" class="theme-toggle" id="themeToggle"
+        aria-label="Toggle light and dark theme" title="Toggle light and dark">
+  <span class="tt-current" id="ttCurrent">Light</span>
+  <span aria-hidden="true">/ Dark</span>
+</button>
+<script>
+(function(){
+  var KEY = 'gudmundr.theme';
+  var root = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var current = document.getElementById('ttCurrent');
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch(_) {}
+  var initial = stored || ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+  apply(initial);
+  btn.addEventListener('click', function(){
+    var next = (root.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem(KEY, next); } catch(_) {}
+  });
+  function apply(mode){
+    root.setAttribute('data-theme', mode === 'dark' ? 'dark' : '');
+    if (mode === 'dark') { current.textContent = 'Dark'; btn.lastElementChild.textContent = '/ Light'; }
+    else { current.textContent = 'Light'; btn.lastElementChild.textContent = '/ Dark'; }
+  }
+})();
+</script>
+
+<script>
+/* Submission endpoint config · edit values here to switch pipelines.
+   Priority order the JS tries: google_form → access_endpoint → formspree_endpoint.
+   Empty everywhere → inline error (no silent mailto).
+
+   Google Form setup (5-min · CAW-manual · FREE · no account beyond Gmail):
+     1. https://forms.google.com → Blank form.
+     2. Title: "Guðmundr access request".
+     3. Settings tab:
+        - Responses → toggle "Collect email addresses" · pick "Verified".
+        - Presentation → "Send responders a copy of their response" → Always.
+        - Defaults → "Make email address required" is auto (verified enforces).
+     4. Add 5 fields (all short-answer/dropdown · required as marked):
+        Q1  · "Full name"                short answer · required
+        Q2  · "Role · organization"      short answer
+        Q3  · "Access type"              dropdown: Individual PIN (15 days) / Gmail OAuth whitelist / Beta list
+        Q4  · "Which app?"                short answer · required
+        Q5  · "Why access?"              paragraph
+     5. Turn ON email notifications for CAW (top-right ⋮ → "Get email notifications for new responses").
+     6. Preview the form in a browser · View source · grep `entry.` — the numeric IDs are per-field.
+     7. Send button → link icon → copy the URL. Form_id is the string between /d/e/ and /viewform.
+     8. Paste form_id + entry_ids below · GitHub-Desktop-push · GH Pages rebuilds → form is live.
+*/
+window.GUDMUNDR_CONFIG = {
+  // === PRIMARY: Google Form (interim · free · LIVE 2026-09-24) ===
+  // Live form: https://docs.google.com/forms/d/e/1FAIpQLSdTi8Ql6fzYOfdwjQcjopNiEFf-DA5gOVgJlAu8AO0D4vfPfw/viewform
+  // CAW-authored 6 questions · entry IDs extracted from FB_PUBLIC_LOAD_DATA_.
+  google_form: {
+    form_id: '1FAIpQLSdTi8Ql6fzYOfdwjQcjopNiEFf-DA5gOVgJlAu8AO0D4vfPfw',
+    entry_ids: {
+      name:         'entry.981383807',    // "Full Name"
+      email:        'entry.1722336940',   // "Email Address"
+      role:         'entry.1125217044',   // "Primary Role or Industry"
+      app:          'entry.674707514',    // "What features are you most interested in testing?"
+      message:      'entry.208338020',    // "Why do you want to join the beta program?"
+      source:       'entry.356834645'     // "How did you hear about us?"
+    }
+  },
+
+  // === SECONDARY: native gudmundr-access Railway app (post-W1) ===
+  access_endpoint: '',   // e.g. 'https://gudmundr-access-production.up.railway.app/api/access/request'
+
+  // === TERTIARY: Formspree fallback ===
+  formspree_endpoint: '',  // e.g. 'https://formspree.io/f/xldkrejw'
+
+  // === Google OAuth entry point (post-W2 · once gudmundr-access serves /auth/google) ===
+  google_oauth_url: '',
+
+  // Pre-approved emails for future Google OAuth (once gudmundr-access ships,
+  // this list migrates to the DB · today it's a symbolic record).
+  oauth_whitelist: [
+    'charles.a.wilson@gudmundr.com'
+  ]
+};
+</script>
+
+<div class="pin-gate" id="pin-gate">
+  <div class="brand-line">Gu<span class="eth">ð</span>mundr</div>
+  <div class="sub-line" id="pin-subline">better i<span class="eth">ð</span>eas · grown organic</div>
+  <form id="pin-form" autocomplete="off">
+    <label for="pin-input">Enter PIN to continue</label>
+    <input type="password" id="pin-input" inputmode="text" autocomplete="off" maxlength="32" required>
+    <button type="submit">Enter</button>
+    <div class="msg" id="pin-msg" role="status" aria-live="polite"></div>
+  </form>
+  <div class="footer-note">
+    Need access? <button type="button" class="link" id="openRequestBtn">Request an invite</button>
+  </div>
+</div>
+
+<!-- REQUEST-ACCESS MODAL (also accessible pre-PIN) -->
+<div class="modal-backdrop" id="request-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+    <div id="modal-form-state">
+      <h2 id="modal-title">Request access</h2>
+      <p class="modal-sub">Your i<span class="eth">ð</span>eas, in review. Submit via the form · you'll be signed in to Google to verify your identity · CAW reviews and grants one of: an individual PIN (expires 15 days) OR a Gmail-OAuth whitelist grant (sign in with Google directly).</p>
+      <form id="request-form" autocomplete="on">
+        <input type="hidden" name="app" id="modal-app-name" value="Guðmundr portfolio (general)">
+        <div class="field">
+          <label for="req-email">Email <span aria-hidden="true">*</span></label>
+          <input type="email" id="req-email" name="email" required autocomplete="email">
+          <div class="field-help">Preview only · Google captures your verified sign-in email on submit.</div>
+        </div>
+        <div class="field">
+          <label for="req-name">Your name <span aria-hidden="true">*</span></label>
+          <input type="text" id="req-name" name="name" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="req-role">Role · organization</label>
+          <input type="text" id="req-role" name="role" placeholder="e.g. CFO at Acme Inc" autocomplete="organization-title">
+        </div>
+        <div class="field">
+          <label for="req-access-type">Access type</label>
+          <select id="req-access-type" name="access_type">
+            <option value="pin-15day">Individual PIN · expires 15 days</option>
+            <option value="oauth-whitelist">Gmail OAuth · sign in with Google</option>
+            <option value="beta">Beta list · wait for launch</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="req-message">Message · why access</label>
+          <textarea id="req-message" name="message" placeholder="Optional. What draws you here?"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send request</button>
+        </div>
+        <div class="err" id="modal-err" role="status" aria-live="polite"></div>
+        <div class="oauth-alt">
+          <p>Prefer to verify identity with Google?</p>
+          <a href="#" class="google-btn" id="modal-google-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12c0-1.4-.1-2.7-.4-4H12v7.5h5.6c-.2 1.3-1 2.4-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-9.2z"/><path d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-1 .6-2.2 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7C4.3 19.6 7.8 22 12 22z"/><path d="M6.2 13.6c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V6.9H2.7C2.2 8.1 2 9.5 2 10.7c0 1.2.2 2.6.7 3.8l3.5-.9z"/><path d="M12 5.9c1.5 0 2.9.5 4 1.5l3-3C17.2 2.7 14.8 2 12 2 7.8 2 4.3 4.4 2.7 7.9l3.5 2.7C7 6.7 9.3 5.9 12 5.9z"/></svg>
+            Sign in with Google
+          </a>
+          <div class="field-help" style="margin-top:6px;">Once approved and whitelisted, this button becomes your login. Pre-approved during beta.</div>
+        </div>
+      </form>
+    </div>
+    <div id="modal-success-state" class="success-state" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <h3>Request received</h3>
+      <p>Google will email <b id="modal-success-email"></b> a copy of your submission for your records.<br>
+         CAW will review shortly and reply with your PIN or a whitelist confirmation.</p>
+      <div class="modal-actions" style="margin-top:1.5rem;">
+        <button type="button" class="btn btn-primary" id="modal-close-after">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Guðmundr home · PIN gate · redirects to /beta.html on unlock */
+(function () {
+  'use strict';
+
+  // ── Rotating subtitle · 6 shipped winners · CAW timing: 30s per subtitle
+  //    with 3s fade-in + 5s fade-out (visible ~22s at full opacity). ─────
+  const SUBS = [
+    "better iðeas · grown organic",
+    "iðeas grown organic",
+    "iðeas · grown · organic",
+    "iðeals grown organic",
+    "grown organic · iðeas",
+    "better iðeals · grown organic"
+  ];
+  function pickIdx(exclude) {
+    if (SUBS.length === 1) return 0;
+    let i; do { i = Math.floor(Math.random() * SUBS.length); } while (i === exclude);
+    return i;
+  }
+  function withEthMarks(str) {
+    return str.replace(/[ðÐ]/g, function(ch){ return '<span class="eth">' + ch + '</span>'; });
+  }
+  function rotateWithSchedule(el) {
+    if (!el) return;
+    // Cycle: 3s fade-in · 22s hold · 5s fade-out · total 30s
+    let idx = -1;
+    function tick() {
+      idx = pickIdx(idx);
+      el.innerHTML = withEthMarks(SUBS[idx]);
+      // Reset · invisible with no transition
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      // Force reflow so the reset commits before the fade-in transition kicks in
+      void el.offsetHeight;
+      el.style.transition = 'opacity 3s ease-in';
+      el.style.opacity = '1';
+      // Fade-out at 25s (after 3s fade-in + 22s hold)
+      setTimeout(() => {
+        el.style.transition = 'opacity 5s ease-out';
+        el.style.opacity = '0';
+      }, 25000);
+      // Next subtitle at 30s
+      setTimeout(tick, 30000);
+    }
+    tick();
+  }
+  const pinSub = document.getElementById('pin-subline');
+  rotateWithSchedule(pinSub);
+
+  // ── PIN gate · shared shared beta gate (10012026) + personal PINs ──
+  // PIN_ENTRIES · array of {hash, kind, expires_days}. Personal PINs
+  // carry a TTL; shared beta PIN persists 30 days like the earlier design.
+  const PIN_ENTRIES = [
+    { hash: 'ed37b6d63a76a63d15cc76443c8b3a3f2c67e05dc9fb4dd0bb7c9a97ab30f5fb', kind: 'shared', ttl_days: 30 },
+    // CAW · personal · issued 2026-09-24 · expires 15 days ("GmB.SPK5p.x1mRL.")
+    { hash: '63bd5839662603c7fbf6dab00279f1f71753445314f333a498784c2e8e9e72b3', kind: 'personal', ttl_days: 15,
+      email: 'charles.a.wilson@gudmundr.com', issued_at: '2026-09-24' }
+  ];
+  const UNLOCK_KEY = 'gudmundr.unlocked_at';
+  const UNLOCK_KIND = 'gudmundr.unlocked_kind';
+  const UNLOCK_EXPIRES = 'gudmundr.unlocked_expires_at';
+  const ATTEMPT_KEY = 'gudmundr.pin_attempts';
+  const LOCKOUT_KEY = 'gudmundr.pin_lockout_until';
+  const MAX_ATTEMPTS = 5;
+  const LOCKOUT_MS = 15 * 60 * 1000;
+  const BETA_URL = '/beta.html';
+
+  async function sha256Hex(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  function isUnlocked() {
+    const at = parseInt(localStorage.getItem(UNLOCK_KEY) || '0', 10);
+    const exp = parseInt(localStorage.getItem(UNLOCK_EXPIRES) || '0', 10);
+    if (!at) return false;
+    if (exp && Date.now() >= exp) return false;
+    return true;
+  }
+  function inLockout() {
+    const until = parseInt(localStorage.getItem(LOCKOUT_KEY) || '0', 10);
+    return until && Date.now() < until;
+  }
+  function goBeta() { window.location.href = BETA_URL; }
+
+  async function tryPin(e) {
+    e.preventDefault();
+    const gate = document.getElementById('pin-gate');
+    const input = document.getElementById('pin-input');
+    const msg = document.getElementById('pin-msg');
+    if (inLockout()) {
+      const mins = Math.ceil((parseInt(localStorage.getItem(LOCKOUT_KEY), 10) - Date.now()) / 60000);
+      msg.textContent = `Too many attempts. Try again in ${mins} min.`; msg.classList.add('err'); return;
+    }
+    const pin = input.value.trim(); if (!pin) return;
+    const hash = await sha256Hex(pin);
+    const match = PIN_ENTRIES.find(e => e.hash === hash);
+    if (match) {
+      const now = Date.now();
+      const expiresAt = now + (match.ttl_days * 24 * 3600 * 1000);
+      localStorage.setItem(UNLOCK_KEY, String(now));
+      localStorage.setItem(UNLOCK_KIND, match.kind);
+      localStorage.setItem(UNLOCK_EXPIRES, String(expiresAt));
+      localStorage.removeItem(ATTEMPT_KEY);
+      localStorage.removeItem(LOCKOUT_KEY);
+      goBeta(); return;
+    }
+    const attempts = parseInt(localStorage.getItem(ATTEMPT_KEY) || '0', 10) + 1;
+    localStorage.setItem(ATTEMPT_KEY, String(attempts));
+    gate.classList.add('shake'); setTimeout(() => gate.classList.remove('shake'), 500);
+    input.value = '';
+    if (attempts >= MAX_ATTEMPTS) {
+      localStorage.setItem(LOCKOUT_KEY, String(Date.now() + LOCKOUT_MS));
+      localStorage.removeItem(ATTEMPT_KEY);
+      msg.textContent = 'Too many attempts. Locked for 15 min.'; msg.classList.add('err');
+    } else {
+      msg.textContent = `Incorrect. ${MAX_ATTEMPTS - attempts} attempts remaining.`; msg.classList.add('err');
+    }
+  }
+
+  // ── Request modal ────────────────────────────────────────────────────
+  const CONFIG = window.GUDMUNDR_CONFIG || {};
+  const GUDMUNDR_ACCESS_ENDPOINT = CONFIG.access_endpoint || '';
+  const FORMSPREE_ENDPOINT       = CONFIG.formspree_endpoint || '';
+  const GOOGLE_OAUTH_URL         = CONFIG.google_oauth_url || '';
+
+  const modal = document.getElementById('request-modal');
+  const modalFormState = document.getElementById('modal-form-state');
+  const modalSuccessState = document.getElementById('modal-success-state');
+  const modalErr = document.getElementById('modal-err');
+  const requestForm = document.getElementById('request-form');
+
+  function openRequestModal() {
+    modalFormState.style.display = 'block';
+    modalSuccessState.style.display = 'none';
+    modalErr.textContent = '';
+    modal.classList.add('open');
+    setTimeout(() => document.getElementById('req-email').focus(), 100);
+  }
+  function closeRequestModal() { modal.classList.remove('open'); }
+  document.getElementById('openRequestBtn').addEventListener('click', openRequestModal);
+  document.getElementById('modal-cancel').addEventListener('click', closeRequestModal);
+  document.getElementById('modal-close-after').addEventListener('click', closeRequestModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeRequestModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeRequestModal();
+  });
+
+  document.getElementById('modal-google-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    if (GOOGLE_OAUTH_URL) {
+      window.location.href = GOOGLE_OAUTH_URL;
+    } else {
+      modalErr.textContent = 'Google sign-in comes online with the gudmundr-access backend. Use the form for now.';
+    }
+  });
+
+  // Submit to Google Form via the formResponse endpoint. Uses no-cors +
+  // form-encoded body; Google returns an opaque response either way, so
+  // we treat a resolved fetch as success (Google is reliable). Because
+  // it's no-cors we cannot inspect status codes — but the form receives
+  // + CAW gets the email regardless.
+  async function submitGoogleForm(gf, payload) {
+    if (!gf.form_id) throw new Error('google_form.form_id not set');
+    const url = `https://docs.google.com/forms/d/e/${gf.form_id}/formResponse`;
+    const body = new URLSearchParams();
+    const map = gf.entry_ids || {};
+    // Direct field-to-entry mapping. Fold access_type into the message
+    // so CAW sees "[pin-15day] user text" in the response.
+    if (map.name    && payload.name)  body.append(map.name,  payload.name);
+    if (map.email   && payload.email) body.append(map.email, payload.email);
+    if (map.role    && payload.role)  body.append(map.role,  payload.role);
+    if (map.app     && payload.app)   body.append(map.app,   payload.app);
+    if (map.message) {
+      const prefix = payload.access_type ? `[${payload.access_type}] ` : '';
+      body.append(map.message, prefix + (payload.message || ''));
+    }
+    if (map.source) body.append(map.source, payload.submitted_from || 'gudmundr.com/');
+    await fetch(url, { method: 'POST', mode: 'no-cors', body });
+    return { google_form: true, email: payload.email };
+  }
+
+  async function submitRequest(payload) {
+    // Priority: Google Form (interim · free) → native backend → Formspree
+    if (CONFIG.google_form && CONFIG.google_form.form_id) {
+      return submitGoogleForm(CONFIG.google_form, payload);
+    }
+    if (GUDMUNDR_ACCESS_ENDPOINT) {
+      const r = await fetch(GUDMUNDR_ACCESS_ENDPOINT, {
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+      });
+      if (!r.ok) throw new Error(`Backend returned ${r.status}`);
+      return r.json();
+    }
+    if (FORMSPREE_ENDPOINT) {
+      const r = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST', headers: {'Accept':'application/json','Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      if (!r.ok) throw new Error(`Formspree returned ${r.status}`);
+      return r.json();
+    }
+    throw new Error('No submission endpoint configured. Contact CAW to enable the Google Form (see GUDMUNDR_CONFIG in index.html).');
+  }
+
+  requestForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    modalErr.textContent = '';
+    const payload = {
+      app: 'Guðmundr portfolio',
+      email: document.getElementById('req-email').value.trim(),
+      name: document.getElementById('req-name').value.trim(),
+      role: document.getElementById('req-role').value.trim(),
+      access_type: document.getElementById('req-access-type').value,
+      message: document.getElementById('req-message').value.trim(),
+      submitted_from: 'gudmundr.com/',
+      submitted_at: new Date().toISOString()
+    };
+    if (!payload.email || !payload.name) { modalErr.textContent = 'Email and name are required.'; return; }
+    try {
+      await submitRequest(payload);
+      document.getElementById('modal-success-email').textContent = payload.email;
+      modalFormState.style.display = 'none';
+      modalSuccessState.style.display = 'block';
+    } catch (err) {
+      modalErr.textContent = err.message;
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (isUnlocked()) { goBeta(); return; }
+    document.getElementById('pin-form').addEventListener('submit', tryPin);
+    document.getElementById('pin-input').focus();
+  });
+})();
+</script>
+</body>
+</html>

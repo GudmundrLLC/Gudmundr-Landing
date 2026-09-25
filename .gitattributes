@@ -1,0 +1,9 @@
+# 2026-09-24 · disable delta compression for large HTML index / library files
+# to prevent pack.tmp from ballooning to 60+ GB during push.
+library.html -delta
+index.html -delta
+*/index.html -delta
+*/cw_review_worksheet.html -delta
+*/cw_action_items.html -delta
+*/cw_action_triage.html -delta
+HTMLFiles/**/*.html -delta
