@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guðmundr Search — universal search hub</title>
+<meta name="description" content="Universal search across every live Guðmundr app · mobile · drawer · tray · sidecar friendly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --background:#FFFFFF; --surface:#F5F5F5;
+  --text-primary:#000000; --text-secondary:#333333; --text-muted:#999999;
+  --accent-heritage:#385E3F; --accent-warm:#D94927;
+  --border:#E3E4E5;
+  --font-serif:'EB Garamond',Georgia,serif;
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','Fira Code',Consolas,monospace;
+}
+[data-theme="dark"] {
+  --background:#000000; --surface:#111111;
+  --text-primary:#FFFFFF; --text-secondary:#CCCCCC; --text-muted:#666666;
+  --accent-heritage:#A1BFA6; --border:#333333;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--font-sans);font-weight:300;background:var(--background);color:var(--text-primary);line-height:1.5;min-height:100vh;transition:background-color .3s,color .3s}
+::selection{background:var(--accent-heritage);color:var(--background)}
+
+.theme-toggle{position:fixed;top:12px;right:12px;z-index:1000;background:var(--background);color:var(--text-secondary);border:1px solid var(--border);padding:.4rem .7rem;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.theme-toggle:hover{color:var(--accent-warm);border-color:var(--accent-warm)}
+.theme-toggle .tt-current{font-weight:600;color:var(--text-primary);margin-right:4px}
+
+.container{max-width:1100px;margin:0 auto;padding:0 1rem}
+
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 0;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.5rem}
+.site-header .brand{font-family:var(--font-serif);font-size:1.2rem;font-weight:500;color:var(--text-primary);text-decoration:none}
+.site-header .brand .eth{color:var(--accent-heritage)}
+.site-header nav{display:flex;gap:1rem;font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.12em}
+.site-header nav a{color:var(--text-secondary);text-decoration:none}
+.site-header nav a:hover{color:var(--accent-warm)}
+
+.hero{padding:1.5rem 0 1rem;text-align:center}
+.hero-badge{display:inline-block;padding:.3rem .8rem;border:1px solid var(--border);font-family:var(--font-mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem}
+.hero-title{font-family:var(--font-serif);font-weight:400;font-size:clamp(1.8rem,5vw,2.6rem);line-height:1.1;margin-bottom:.3rem;letter-spacing:-.015em}
+.hero-title .eth{color:var(--accent-heritage)}
+.hero-sub{font-family:var(--font-serif);font-style:italic;color:var(--text-secondary);font-size:clamp(.95rem,2.5vw,1.1rem)}
+
+.universal-bar{display:flex;gap:.5rem;padding:1rem 0 1.5rem;align-items:stretch;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.universal-bar input{flex:1;min-width:0;font-family:var(--font-sans);font-weight:300;font-size:.95rem;padding:.6rem .8rem;border:1px solid var(--border);background:var(--surface);color:var(--text-primary)}
+.universal-bar input:focus{outline:none;border-color:var(--accent-heritage)}
+.universal-bar button{font-family:var(--font-mono);font-size:.62rem;padding:.6rem 1rem;background:var(--text-primary);color:var(--background);border:1px solid var(--text-primary);text-transform:uppercase;letter-spacing:.12em;cursor:pointer;white-space:nowrap}
+.universal-bar button:hover{background:var(--accent-warm);border-color:var(--accent-warm)}
+
+.apps-grid{display:grid;gap:.75rem;grid-template-columns:1fr;margin-bottom:2rem}
+@media(min-width:560px){.apps-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.apps-grid{grid-template-columns:repeat(3,1fr)}}
+
+.app-card{background:var(--background);border:1px solid var(--border);padding:.9rem;display:flex;flex-direction:column;gap:.5rem}
+.app-card:focus-within{border-color:var(--accent-heritage)}
+.app-head{display:flex;align-items:center;gap:.5rem}
+.app-icon{color:var(--text-muted);flex-shrink:0;width:18px;height:18px}
+.app-icon svg{width:100%;height:100%}
+.app-name{font-family:var(--font-serif);font-size:1rem;font-weight:500;flex:1;line-height:1.2}
+.app-pill{font-family:var(--font-mono);font-size:.56rem;padding:1px 6px;color:var(--accent-heritage);border:1px solid var(--accent-heritage);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.app-form{display:flex;gap:.4rem;align-items:stretch}
+.app-form input{flex:1;min-width:0;font-family:var(--font-sans);font-weight:300;font-size:.85rem;padding:.45rem .55rem;border:1px solid var(--border);background:var(--surface);color:var(--text-primary)}
+.app-form input:focus{outline:none;border-color:var(--accent-heritage)}
+.app-form button{font-family:var(--font-mono);font-size:.6rem;padding:.45rem .7rem;background:transparent;color:var(--text-secondary);border:1px solid var(--border);text-transform:uppercase;letter-spacing:.12em;cursor:pointer}
+.app-form button:hover{color:var(--accent-warm);border-color:var(--accent-warm)}
+.app-foot{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:.58rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em}
+.app-foot a{color:var(--text-secondary);text-decoration:none;border-bottom:1px solid var(--border)}
+.app-foot a:hover{color:var(--accent-warm);border-color:var(--accent-warm)}
+
+.site-footer{padding:1.5rem 0;border-top:1px solid var(--border);font-family:var(--font-serif);font-size:.85rem;color:var(--text-muted);text-align:center}
+.site-footer a{color:var(--text-secondary);text-decoration:none;border-bottom:1px solid var(--border)}
+.site-footer .eth{color:var(--accent-heritage);font-weight:500}
+
+/* ── Compact / drawer mode: pass ?compact=1 or embed in iframe narrower than 480px ── */
+body.compact .site-header,body.compact .theme-toggle,body.compact .site-footer{display:none}
+body.compact .hero{padding:.75rem 0 .5rem}
+body.compact .container{padding:0 .75rem}
+body.compact .universal-bar{padding:.5rem 0 .75rem;margin-bottom:.75rem}
+</style>
+</head>
+<body>
+
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme">
+  <span class="tt-current" id="ttCurrent">Light</span><span aria-hidden="true">/ Dark</span>
+</button>
+<script>
+(function(){
+  var KEY='gudmundr.theme';var root=document.documentElement;
+  var btn=document.getElementById('themeToggle');var cur=document.getElementById('ttCurrent');
+  var stored=null;try{stored=localStorage.getItem(KEY)}catch(_){}
+  var initial=stored||((window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');
+  apply(initial);
+  btn.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    apply(next);try{localStorage.setItem(KEY,next)}catch(_){}
+  });
+  function apply(m){root.setAttribute('data-theme',m==='dark'?'dark':'');if(m==='dark'){cur.textContent='Dark';btn.lastElementChild.textContent='/ Light'}else{cur.textContent='Light';btn.lastElementChild.textContent='/ Dark'}}
+})();
+</script>
+
+<script>
+// Enter compact mode if ?compact=1 or if window is narrow and iframed
+(function(){
+  var p=new URLSearchParams(location.search);
+  var inIframe=window.self!==window.top;
+  if(p.get('compact')==='1'||(inIframe&&window.innerWidth<520))document.body.classList.add('compact');
+})();
+</script>
+
+<div class="container">
+  <header class="site-header">
+    <a href="/" class="brand">Gu<span class="eth">ð</span>mundr · Search</a>
+    <nav>
+      <a href="/beta.html">Beta</a>
+      <a href="/library.html">Library</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-badge">Universal Search · All Live Apps</div>
+    <h1 class="hero-title">Search across Gu<span class="eth">ð</span>mundr</h1>
+    <p class="hero-sub">One query · every app · opens the right place.</p>
+  </section>
+
+  <form class="universal-bar" id="universalForm" onsubmit="return universalSearch(event)">
+    <input type="search" id="universalQ" placeholder="Search every live app at once…" autocomplete="off" autofocus>
+    <button type="submit">Fan out</button>
+  </form>
+
+  <div class="apps-grid" id="apps-grid"></div>
+
+  <footer class="site-footer">
+    Gu<span class="eth">ð</span>mundr LLC · better i<span class="eth">ð</span>eas · grown organic · <a href="/beta.html">app portfolio</a>
+  </footer>
+</div>
+
+<script>
+/* Live app registry · keep in sync with search/*.html satellites.
+   searchUrl is a template · {q} is replaced with the URL-encoded query.
+   If an app does not yet have an in-app search endpoint, we default to
+   {base}?q={q} — opens the app with the query parameter attached. */
+const APPS = [
+  { slug:'bp-demo',               name:'BP Demo',                       icon:'briefcase',    base:'https://friendly-possibility-production-bb39.up.railway.app/',  searchUrl:'https://friendly-possibility-production-bb39.up.railway.app/?q={q}' },
+  { slug:'family-alignment',      name:'Family Alignment',              icon:'users',        base:'https://family-alignment-production-d237.up.railway.app/',       searchUrl:'https://family-alignment-production-d237.up.railway.app/?q={q}' },
+  { slug:'ward-compass',          name:'Ward Compass Ministering',      icon:'compass',      base:'https://ward-compass-ministering-production.up.railway.app/',    searchUrl:'https://ward-compass-ministering-production.up.railway.app/?q={q}' },
+  { slug:'memorykeeper',          name:'MemoryKeeper',                  icon:'mic',          base:'https://memorykeeper-production-f1cb.up.railway.app/',           searchUrl:'https://memorykeeper-production-f1cb.up.railway.app/?q={q}' },
+  { slug:'calorie-counter',       name:'Calorie Counter',               icon:'apple',        base:'https://wholesome-wonder-production.up.railway.app/',            searchUrl:'https://wholesome-wonder-production.up.railway.app/?q={q}' },
+  { slug:'who-am-i',              name:'Who Am I?',                     icon:'help-circle',  base:'https://who-am-i-production.up.railway.app/',                    searchUrl:'https://who-am-i-production.up.railway.app/?q={q}' },
+  { slug:'first-things-first',    name:'First Things First',            icon:'check-circle', base:'https://let-me-guess-production.up.railway.app/',                searchUrl:'https://let-me-guess-production.up.railway.app/?q={q}' },
+  { slug:'eip',                   name:'Enterprise Intelligence',       icon:'database',     base:'https://noble-adaptation-production-e990.up.railway.app/',       searchUrl:'https://noble-adaptation-production-e990.up.railway.app/?q={q}' },
+  { slug:'epm-di',                name:'EPM Decision Intelligence',     icon:'target',       base:'https://jubilant-heart-production-32ae.up.railway.app/',         searchUrl:'https://jubilant-heart-production-32ae.up.railway.app/?q={q}' },
+  { slug:'wttt',                  name:'Write to the Top',              icon:'edit-3',       base:'https://observant-energy-production-5aa6.up.railway.app/',       searchUrl:'https://observant-energy-production-5aa6.up.railway.app/?q={q}' },
+  { slug:'qual-demo',             name:'Qual Demo',                     icon:'filter',       base:'https://worthy-love-production-4d66.up.railway.app/',            searchUrl:'https://worthy-love-production-4d66.up.railway.app/?q={q}' },
+  { slug:'library',               name:'AI Artifacts Library',          icon:'book-open',    base:'/library.html',                                                   searchUrl:'/library.html?q={q}' },
+  { slug:'job-coach',             name:'AI Job Search + Coach',         icon:'briefcase',    base:'https://job-hunt-web-production.up.railway.app/',                searchUrl:'https://job-hunt-web-production.up.railway.app/?q={q}' }
+];
+
+const ICONS = {
+  'briefcase':'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  'users':'<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M17 3.13a4 4 0 0 1 0 7.75"/>',
+  'compass':'<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+  'mic':'<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 1 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>',
+  'apple':'<path d="M12 20.94c1.5 0 2.75-1.06 4-1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 2c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 5.66C2 12 5 20 8 20c1.25 0 2.5-1.06 4-1.06z"/><path d="M10 2c1 .5 2 2 2 5"/>',
+  'help-circle':'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  'check-circle':'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+  'database':'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
+  'target':'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  'edit-3':'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+  'filter':'<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>',
+  'book-open':'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'
+};
+
+function iconSvg(n){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]||ICONS['help-circle']}</svg>`}
+
+function openSearch(app,q){
+  const url = app.searchUrl.replace('{q}', encodeURIComponent(q||''));
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function universalSearch(e){
+  e.preventDefault();
+  const q=document.getElementById('universalQ').value.trim();
+  if(!q) return false;
+  APPS.forEach((a,i)=>setTimeout(()=>openSearch(a,q), i*120)); // staggered to avoid popup-blocker nukes
+  return false;
+}
+
+function render(){
+  const g=document.getElementById('apps-grid');
+  g.innerHTML = APPS.map(a=>`
+    <div class="app-card">
+      <div class="app-head">
+        <span class="app-icon">${iconSvg(a.icon)}</span>
+        <span class="app-name">${a.name}</span>
+        <span class="app-pill">Live</span>
+      </div>
+      <form class="app-form" data-slug="${a.slug}" onsubmit="return cardSubmit(event,'${a.slug}')">
+        <input type="search" placeholder="Search ${a.name.replace(/'/g,"&apos;")}…" autocomplete="off">
+        <button type="submit">Go</button>
+      </form>
+      <div class="app-foot">
+        <a href="/search/${a.slug}.html">Solo page</a>
+        <a href="${a.base}" target="_blank" rel="noopener">Open app ↗</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function cardSubmit(e,slug){
+  e.preventDefault();
+  const form=e.target;
+  const q=form.querySelector('input').value.trim();
+  const app=APPS.find(a=>a.slug===slug);
+  if(app) openSearch(app,q);
+  return false;
+}
+
+render();
+</script>
+</body>
+</html>
