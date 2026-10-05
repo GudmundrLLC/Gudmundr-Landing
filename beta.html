@@ -522,8 +522,12 @@ window.GUDMUNDR_CONFIG = {
     window.location.href = '/';
   });
 
-  // App catalog
-  const APPS = [
+  // 2026-10-05 · Gateway integration. Primary source is the Gudmundr Gateway's
+  // /api/catalog/apps endpoint; this inline list stays as fallback for when
+  // Gateway isn't reachable (predeployment, outage, LAN-only dev). Shape must
+  // stay in sync with Gateway data/apps.json — Gateway wins when both present.
+  const GATEWAY_URL  = (window.GUDMUNDR_CONFIG && window.GUDMUNDR_CONFIG.gateway_url) || 'https://gudmundr-gateway.up.railway.app';
+  const INLINE_APPS = [
     { name: 'BP Demo', desc: 'Multi-company CFO walkthrough · Wipro EPM presales · 22 screens · 562 companies.', icon: 'briefcase', portfolio: 'a', status: 'live', url: 'https://friendly-possibility-production-bb39.up.railway.app/' },
     { name: 'Family Alignment', desc: 'Cross-app auth authority · goals · projects · roles · journal · daily rhythms.', icon: 'users', portfolio: 'b', status: 'live', url: 'https://family-alignment-production-d237.up.railway.app/' },
     { name: 'Ward Compass Ministering', desc: 'Bishop tooling · ministering assignments · needs tracking · spiritual thoughts.', icon: 'compass', portfolio: 'b', status: 'live', url: 'https://ward-compass-ministering-production.up.railway.app/' },
@@ -600,8 +604,31 @@ window.GUDMUNDR_CONFIG = {
     { name: 'My Inventory', desc: 'Household inventory · what-I-own · where-it-is · warranty + value tracking.', icon: 'database', portfolio: 'c', status: 'plan' },
     { name: 'Barter', desc: 'Buy · sell · trade · gift · personal marketplace with trust-graph routing.', icon: 'briefcase', portfolio: 'c', status: 'plan' }
   ];
+  // Live binding — mutable so Gateway fetch can replace it after boot.
+  let APPS = INLINE_APPS;
   const STATUS_LABEL = { live: 'Live', beta: 'Beta', build: 'Building', plan: 'Planned' };
   const PORTFOLIO_LABEL = { a: 'Wipro', b: 'Family', c: 'Personal', s: 'Shared' };
+
+  // Try to fetch the authoritative catalog from Gateway. On success, replace
+  // APPS and re-render whatever filter the user has active. On failure, the
+  // inline list stays — no visible disruption.
+  async function tryHydrateFromGateway() {
+    try {
+      const resp = await fetch(`${GATEWAY_URL}/api/catalog/apps`, { credentials: 'omit' });
+      if (!resp.ok) return;
+      const data = await resp.json();
+      const items = (data.items || []).map(a => ({
+        name: a.name, desc: a.desc, icon: a.icon,
+        portfolio: a.portfolio, status: a.status,
+        ...(a.url ? { url: a.url } : {}),
+      }));
+      if (items.length) {
+        APPS = items;
+        const activeBtn = document.querySelector('.filter-bar button.active');
+        renderCards(activeBtn ? activeBtn.dataset.filter : 'all');
+      }
+    } catch (e) { /* Gateway unreachable — stay on inline fallback. */ }
+  }
 
   function iconSvg(name) {
     const P = {
@@ -763,6 +790,7 @@ window.GUDMUNDR_CONFIG = {
 
   document.addEventListener('DOMContentLoaded', () => {
     renderCards('all');
+    tryHydrateFromGateway();
     document.querySelectorAll('.filter-bar button').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
@@ -773,5 +801,19 @@ window.GUDMUNDR_CONFIG = {
   });
 })();
 </script>
+
+<!-- 2026-10-05 · eco-chrome: cmd-K palette, per-app ⋮ dropdowns, Save-PIN. -->
+<script>
+  window.ECO_CHROME_CONFIG = {
+    gateway:    (window.GUDMUNDR_CONFIG && window.GUDMUNDR_CONFIG.gateway_url)
+                || 'https://gudmundr-gateway.up.railway.app',
+    userId:     'default',
+    bridgeBase: '/bridge',
+    appId:      'gudmundr_landing',
+    context:    {},
+  };
+</script>
+<link rel="stylesheet" href="https://gudmundr-gateway.up.railway.app/static/eco-chrome.css" />
+<script src="https://gudmundr-gateway.up.railway.app/static/eco-chrome.js" defer></script>
 </body>
 </html>
