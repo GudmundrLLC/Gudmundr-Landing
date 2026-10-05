@@ -526,7 +526,7 @@ window.GUDMUNDR_CONFIG = {
   // /api/catalog/apps endpoint; this inline list stays as fallback for when
   // Gateway isn't reachable (predeployment, outage, LAN-only dev). Shape must
   // stay in sync with Gateway data/apps.json — Gateway wins when both present.
-  const GATEWAY_URL  = (window.GUDMUNDR_CONFIG && window.GUDMUNDR_CONFIG.gateway_url) || 'https://gudmundr-gateway.up.railway.app';
+  const GATEWAY_URL  = (window.GUDMUNDR_CONFIG && window.GUDMUNDR_CONFIG.gateway_url) || 'https://gudmundr-gateway-production.up.railway.app';
   const INLINE_APPS = [
     { name: 'BP Demo', desc: 'Multi-company CFO walkthrough · Wipro EPM presales · 22 screens · 562 companies.', icon: 'briefcase', portfolio: 'a', status: 'live', url: 'https://friendly-possibility-production-bb39.up.railway.app/' },
     { name: 'Family Alignment', desc: 'Cross-app auth authority · goals · projects · roles · journal · daily rhythms.', icon: 'users', portfolio: 'b', status: 'live', url: 'https://family-alignment-production-d237.up.railway.app/' },
@@ -806,14 +806,14 @@ window.GUDMUNDR_CONFIG = {
 <script>
   window.ECO_CHROME_CONFIG = {
     gateway:    (window.GUDMUNDR_CONFIG && window.GUDMUNDR_CONFIG.gateway_url)
-                || 'https://gudmundr-gateway.up.railway.app',
+                || 'https://gudmundr-gateway-production.up.railway.app',
     userId:     'default',
     bridgeBase: '/bridge',
     appId:      'gudmundr_landing',
     context:    {},
   };
 </script>
-<link rel="stylesheet" href="https://gudmundr-gateway.up.railway.app/static/eco-chrome.css" />
-<script src="https://gudmundr-gateway.up.railway.app/static/eco-chrome.js" defer></script>
+<link rel="stylesheet" href="https://gudmundr-gateway-production.up.railway.app/static/eco-chrome.css" />
+<script src="https://gudmundr-gateway-production.up.railway.app/static/eco-chrome.js" defer></script>
 </body>
 </html>
