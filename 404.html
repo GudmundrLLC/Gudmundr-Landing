@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Guðmundr · redirecting…</title>
+<meta name="robots" content="noindex">
+<style>
+ body { font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+        max-width: 540px; margin: 4rem auto; padding: 0 1rem; color: #1e2024; }
+ h1 { font-family: 'EB Garamond', Georgia, serif; font-weight: 400; }
+ .meta { color: #666; font-size: 0.85rem; margin-top: 1rem; }
+ a { color: #385E3F; }
+</style>
+</head>
+<body>
+
+<script>
+// 2026-10-06 · Legacy-URL redirect
+// library.html (and other catalog surfaces) hardcode `/HTMLFiles/...` paths
+// against gudmundr.com from when aigenerated_html claimed the apex.
+// After the apex migrated to gudmundr-landing, those paths 404.
+// This 404 handler bounces them to library.gudmundr.com (where the content
+// actually lives) so legacy links keep working without regenerating library.html.
+(function () {
+  var p = location.pathname;
+  var q = location.search || '';
+  var h = location.hash || '';
+  var LEGACY_PREFIXES = [
+    '/HTMLFiles/',
+    '/hub.html',
+    '/HTMLFiles%2F',   // percent-encoded variants
+  ];
+  for (var i = 0; i < LEGACY_PREFIXES.length; i++) {
+    if (p === LEGACY_PREFIXES[i] || p.indexOf(LEGACY_PREFIXES[i]) === 0) {
+      var target = 'https://library.gudmundr.com' + p + q + h;
+      // Replace, don't push, so Back button doesn't trap in a redirect loop.
+      location.replace(target);
+      return;
+    }
+  }
+})();
+</script>
+
+<h1>Not found</h1>
+<p>The path <code id="path"></code> doesn't exist on gudmundr.com.</p>
+<p>Try:</p>
+<ul>
+  <li><a href="/">gudmundr.com home</a></li>
+  <li><a href="/library.html">library catalog</a></li>
+  <li><a href="/beta.html">beta portal</a></li>
+  <li><a href="https://library.gudmundr.com/">library.gudmundr.com</a> (full document tree)</li>
+</ul>
+<p class=meta>If you landed here from a document link in library.html, that link should have already bounced you to library.gudmundr.com — if it didn't, the auto-redirect script above was blocked (ad blocker · privacy mode · old browser).</p>
+
+<script>
+document.getElementById('path').textContent = location.pathname;
+</script>
+
+</body>
+</html>
