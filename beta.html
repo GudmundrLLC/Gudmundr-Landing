@@ -523,10 +523,10 @@ window.GUDMUNDR_CONFIG = {
   });
 
   // 2026-10-05 · Gateway integration. Primary source is the Gudmundr Gateway's
-  // /api/catalog/apps endpoint; this inline list stays as fallback for when
+  // /svc/ecosystem/apps endpoint; this inline list stays as fallback for when
   // Gateway isn't reachable (predeployment, outage, LAN-only dev). Shape must
   // stay in sync with Gateway data/apps.json — Gateway wins when both present.
-  const GATEWAY_URL  = (window.GUDMUNDR_CONFIG && window.GUDMUNDR_CONFIG.gateway_url) || 'https://gudmundr-gateway-production.up.railway.app';
+  const GATEWAY_URL  = (window.GUDMUNDR_CONFIG && window.GUDMUNDR_CONFIG.gateway_url) || 'https://gateway.gudmundr.com';
   const INLINE_APPS = [
     { name: 'BP Demo', desc: 'Multi-company CFO walkthrough · Wipro EPM presales · 22 screens · 562 companies.', icon: 'briefcase', portfolio: 'a', status: 'live', url: 'https://friendly-possibility-production-bb39.up.railway.app/' },
     { name: 'Gud Plan', desc: 'Wipro Intelligence · Integrated Planning & Consolidation · production successor to BP Demo at cutover.', icon: 'target', portfolio: 'a', status: 'beta', url: 'https://web-production-1a37e.up.railway.app/' },
@@ -599,6 +599,7 @@ window.GUDMUNDR_CONFIG = {
     { name: 'Poem Prompt Optimizer', desc: 'Optimized AI prompts for poetry · rhythm + form + rhyme guidance.', icon: 'feather', portfolio: 'c', status: 'plan' },
     { name: 'Lyrics Prompt Optimizer', desc: 'Optimized AI prompts for song lyrics · style + hook + narrative.', icon: 'music', portfolio: 'c', status: 'plan' },
     { name: 'Short Story Prompt Optimizer', desc: 'Optimized AI prompts for short fiction · voice + structure + tension.', icon: 'book', portfolio: 'c', status: 'plan' },
+    { name: 'CCT Research Hub', desc: 'Shared literature workspace for a lab studying the chaperonin CCT/TRiC · search · shared library · subunits · scope · cited Q&A.', icon: 'flask-conical', portfolio: 'c', status: 'live', url: 'https://cctresearch-production.up.railway.app/' },
     { name: 'Research Prompt Optimizer', desc: 'Optimized AI prompts for literature review + hypothesis exploration.', icon: 'flask-conical', portfolio: 'c', status: 'plan' },
     { name: 'Résumé Creator', desc: 'Structured résumé builder · role-tailored variants · PDF/DOCX export.', icon: 'file-text', portfolio: 'c', status: 'plan' },
     { name: 'My Collections', desc: 'Personal collection catalog · books · records · art · provenance + photos.', icon: 'book', portfolio: 'c', status: 'plan' },
@@ -615,7 +616,8 @@ window.GUDMUNDR_CONFIG = {
   // inline list stays — no visible disruption.
   async function tryHydrateFromGateway() {
     try {
-      const resp = await fetch(`${GATEWAY_URL}/api/catalog/apps`, { credentials: 'omit' });
+      // 2026-11-22 · canonical path (legacy /api/catalog/apps returns 410 after 2026-12-15).
+      const resp = await fetch(`${GATEWAY_URL}/svc/ecosystem/apps`, { credentials: 'omit' });
       if (!resp.ok) return;
       const data = await resp.json();
       const items = (data.items || []).map(a => ({
@@ -807,14 +809,14 @@ window.GUDMUNDR_CONFIG = {
 <script>
   window.ECO_CHROME_CONFIG = {
     gateway:    (window.GUDMUNDR_CONFIG && window.GUDMUNDR_CONFIG.gateway_url)
-                || 'https://gudmundr-gateway-production.up.railway.app',
+                || 'https://gateway.gudmundr.com',
     userId:     'default',
     bridgeBase: '/bridge',
     appId:      'gudmundr_landing',
     context:    {},
   };
 </script>
-<link rel="stylesheet" href="https://gudmundr-gateway-production.up.railway.app/static/eco-chrome.css" />
-<script src="https://gudmundr-gateway-production.up.railway.app/static/eco-chrome.js" defer></script>
+<link rel="stylesheet" href="https://gateway.gudmundr.com/static/eco-chrome.css" />
+<script src="https://gateway.gudmundr.com/static/eco-chrome.js" defer></script>
 </body>
 </html>
