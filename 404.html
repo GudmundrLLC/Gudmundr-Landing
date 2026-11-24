@@ -19,7 +19,7 @@
 // library.html (and other catalog surfaces) hardcode `/HTMLFiles/...` paths
 // against gudmundr.com from when aigenerated_html claimed the apex.
 // After the apex migrated to gudmundr-landing, those paths 404.
-// This 404 handler bounces them to library.gudmundr.com (where the content
+// This 404 handler bounces them to gateway.gudmundr.com/library/ (where the content
 // actually lives) so legacy links keep working without regenerating library.html.
 (function () {
   var p = location.pathname;
@@ -32,7 +32,7 @@
   ];
   for (var i = 0; i < LEGACY_PREFIXES.length; i++) {
     if (p === LEGACY_PREFIXES[i] || p.indexOf(LEGACY_PREFIXES[i]) === 0) {
-      var target = 'https://library.gudmundr.com' + p + q + h;
+      var target = 'https://gateway.gudmundr.com/library' + p + q + h;
       // Replace, don't push, so Back button doesn't trap in a redirect loop.
       location.replace(target);
       return;
@@ -48,9 +48,9 @@
   <li><a href="/">gudmundr.com home</a></li>
   <li><a href="/library.html">library catalog</a></li>
   <li><a href="/beta.html">beta portal</a></li>
-  <li><a href="https://library.gudmundr.com/">library.gudmundr.com</a> (full document tree)</li>
+  <li><a href="https://gateway.gudmundr.com/library/">gateway.gudmundr.com/library</a> (full document tree · sign-in required)</li>
 </ul>
-<p class=meta>If you landed here from a document link in library.html, that link should have already bounced you to library.gudmundr.com — if it didn't, the auto-redirect script above was blocked (ad blocker · privacy mode · old browser).</p>
+<p class=meta>If you landed here from a document link in library.html, that link should have already bounced you to the library on the Gateway — if it didn't, the auto-redirect script above was blocked (ad blocker · privacy mode · old browser).</p>
 
 <script>
 document.getElementById('path').textContent = location.pathname;

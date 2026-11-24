@@ -305,8 +305,8 @@ window.GUDMUNDR_CONFIG = {
   formspree_endpoint: '',  // e.g. 'https://formspree.io/f/xldkrejw'
 
   // === Sign-in entry point · Gudmundr Gateway (Google) via the beta portal ===
-  // Swap the host to https://apps.gudmundr.com once its DNS is live.
-  google_oauth_url: 'https://gudmundr-apps-production.up.railway.app/auth/gateway/start?next=%2F',
+  // Served as a path on the Gateway (eNom blocks the apps.gudmundr.com record); signed-out visitors go to Gateway login.
+  google_oauth_url: 'https://gateway.gudmundr.com/apps/',
 
   // Pre-approved emails for future Google OAuth (once gudmundr-access ships,
   // this list migrates to the DB · today it's a symbolic record).
@@ -322,9 +322,9 @@ window.GUDMUNDR_CONFIG = {
   <div class="signin">
     <!-- Sign-in goes through the Gudmundr Gateway. The beta portal starts the
          Gateway sign-in (state + callback on the portal) and lands on its catalog.
-         Portal URL: swap PORTAL_URL below to https://apps.gudmundr.com once its DNS is live. -->
+         The portal is served at gateway.gudmundr.com/apps/ (Gateway sign-in first). -->
     <a class="signin-btn" id="signinBtn"
-       href="https://gudmundr-apps-production.up.railway.app/auth/gateway/start?next=%2F">Sign in with Gudmundr</a>
+       href="https://gateway.gudmundr.com/apps/">Sign in with Gudmundr</a>
     <div class="signin-note">Beta apps open after sign-in</div>
   </div>
   <div class="footer-note">
@@ -443,10 +443,10 @@ window.GUDMUNDR_CONFIG = {
   rotateWithSchedule(landingSub);
 
   // ── Sign in · Gudmundr Gateway via the beta portal ─────────────────
-  // PORTAL_URL is the apps host root. Swap to 'https://apps.gudmundr.com'
-  // once that DNS record serves the portal over TLS.
-  const PORTAL_URL = 'https://gudmundr-apps-production.up.railway.app';
-  document.getElementById('signinBtn').href = PORTAL_URL + '/auth/gateway/start?next=%2F';
+  // PORTAL_URL is the portal under the Gateway path proxy;
+  // switch to https://apps.gudmundr.com only if that DNS record is ever added.
+  const PORTAL_URL = 'https://gateway.gudmundr.com/apps';
+  document.getElementById('signinBtn').href = PORTAL_URL + '/';
 
   // ── Request modal ────────────────────────────────────────────────────
   const CONFIG = window.GUDMUNDR_CONFIG || {};
