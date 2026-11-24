@@ -65,21 +65,21 @@ body {
 .theme-toggle .tt-current { font-weight: 600; color: var(--text-primary); margin-right: var(--space-xs); }
 .theme-toggle:hover .tt-current { color: var(--accent-warm); }
 
-.pin-gate {
+.landing {
   position: fixed; inset: 0; z-index: 100;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   padding: var(--space-lg);
   background: var(--background);
 }
-.pin-gate .brand-line {
+.landing .brand-line {
   font-family: var(--font-serif); font-weight: 400;
   font-size: clamp(2.5rem, 8vw, 4rem);
   color: var(--text-primary);
   letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1;
 }
-.pin-gate .brand-line .eth { color: var(--accent-heritage); }
-.pin-gate .sub-line {
+.landing .brand-line .eth { color: var(--accent-heritage); }
+.landing .sub-line {
   font-family: var(--font-serif); font-style: italic; font-weight: 400;
   font-size: clamp(1rem, 3vw, 1.25rem);
   color: var(--text-secondary);
@@ -87,65 +87,44 @@ body {
   min-height: 1.6em;
   opacity: 0;   /* start invisible · JS applies transitions per cycle */
 }
-.pin-gate .sub-line .eth { color: var(--accent-heritage); font-weight: 500; }
-.pin-gate form {
-  display: flex; flex-direction: column; gap: 14px;
+.landing .sub-line .eth { color: var(--accent-heritage); font-weight: 500; }
+.landing .signin {
+  display: flex; flex-direction: column; gap: 14px; align-items: stretch;
   width: 100%; max-width: 320px;
 }
-.pin-gate label {
-  font-family: var(--font-mono); font-size: 0.68rem;
-  text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--text-muted); font-weight: 400;
-}
-.pin-gate input {
-  font-family: var(--font-mono); font-size: 1.1rem;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
-  background: var(--surface); color: var(--text-primary);
-  letter-spacing: 0.2em; text-align: center;
-  transition: border-color 0.2s;
-}
-.pin-gate input:focus { outline: none; border-color: var(--accent-heritage); }
-.pin-gate button {
+.landing .signin-btn {
   font-family: var(--font-mono); font-size: 0.72rem;
-  font-weight: 600; letter-spacing: 0.14em;
-  padding: 14px 20px;
+  font-weight: 600; letter-spacing: 0.14em; text-align: center;
+  padding: 14px 20px; text-decoration: none;
   background: var(--text-primary); color: var(--background);
   border: 1px solid var(--text-primary);
   cursor: pointer; text-transform: uppercase;
   transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
-.pin-gate button:hover { background: var(--accent-warm); border-color: var(--accent-warm); color: #fff; }
-.pin-gate .msg {
-  font-family: var(--font-mono); font-size: 0.72rem;
-  color: var(--text-secondary); text-align: center;
-  min-height: 20px; margin-top: 6px;
+.landing .signin-btn:hover { background: var(--accent-warm); border-color: var(--accent-warm); color: #fff; }
+.landing .signin-btn:focus-visible { outline: 2px solid var(--accent-heritage); outline-offset: 3px; }
+.landing .signin-note {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--text-muted); text-align: center;
   letter-spacing: 0.05em;
 }
-.pin-gate .msg.err { color: var(--error); }
-.pin-gate.shake { animation: shake 0.4s; }
-@keyframes shake {
-  0%,100% { transform: translateX(0); }
-  20%,60% { transform: translateX(-6px); }
-  40%,80% { transform: translateX(6px); }
-}
-.pin-gate .footer-note {
+.landing .footer-note {
   position: absolute; bottom: 32px;
   text-align: center; font-family: var(--font-sans); font-size: 0.75rem;
   color: var(--text-muted); letter-spacing: 0.03em;
 }
-.pin-gate .footer-note a, .pin-gate .footer-note button.link {
+.landing .footer-note a, .landing .footer-note button.link {
   color: var(--text-secondary); text-decoration: none;
   border: none; background: none; padding: 0 0 1px;
   border-bottom: 1px solid var(--border);
   font: inherit; cursor: pointer;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
-.pin-gate .footer-note a:hover, .pin-gate .footer-note button.link:hover {
+.landing .footer-note a:hover, .landing .footer-note button.link:hover {
   color: var(--accent-warm); border-bottom-color: var(--accent-warm);
 }
 
-/* === REQUEST-ACCESS MODAL (pre-PIN visible) === */
+/* === REQUEST-ACCESS MODAL === */
 .modal-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.55);
   z-index: 200; display: none;
@@ -325,8 +304,9 @@ window.GUDMUNDR_CONFIG = {
   // === TERTIARY: Formspree fallback ===
   formspree_endpoint: '',  // e.g. 'https://formspree.io/f/xldkrejw'
 
-  // === Google OAuth entry point (post-W2 · once gudmundr-access serves /auth/google) ===
-  google_oauth_url: '',
+  // === Sign-in entry point · Gudmundr Gateway (Google) via the beta portal ===
+  // Swap the host to https://apps.gudmundr.com once its DNS is live.
+  google_oauth_url: 'https://gudmundr-apps-production.up.railway.app/auth/gateway/start?next=%2F',
 
   // Pre-approved emails for future Google OAuth (once gudmundr-access ships,
   // this list migrates to the DB · today it's a symbolic record).
@@ -336,21 +316,23 @@ window.GUDMUNDR_CONFIG = {
 };
 </script>
 
-<div class="pin-gate" id="pin-gate">
+<div class="landing" id="landing">
   <div class="brand-line">Gu<span class="eth">ð</span>mundr</div>
-  <div class="sub-line" id="pin-subline">better i<span class="eth">ð</span>eas · grown organic</div>
-  <form id="pin-form" autocomplete="off">
-    <label for="pin-input">Enter PIN to continue</label>
-    <input type="password" id="pin-input" inputmode="text" autocomplete="off" maxlength="32" required>
-    <button type="submit">Enter</button>
-    <div class="msg" id="pin-msg" role="status" aria-live="polite"></div>
-  </form>
+  <div class="sub-line" id="landing-subline">better i<span class="eth">ð</span>eas · grown organic</div>
+  <div class="signin">
+    <!-- Sign-in goes through the Gudmundr Gateway. The beta portal starts the
+         Gateway sign-in (state + callback on the portal) and lands on its catalog.
+         Portal URL: swap PORTAL_URL below to https://apps.gudmundr.com once its DNS is live. -->
+    <a class="signin-btn" id="signinBtn"
+       href="https://gudmundr-apps-production.up.railway.app/auth/gateway/start?next=%2F">Sign in with Gudmundr</a>
+    <div class="signin-note">Beta apps open after sign-in</div>
+  </div>
   <div class="footer-note">
     Need access? <button type="button" class="link" id="openRequestBtn">Request an invite</button>
   </div>
 </div>
 
-<!-- REQUEST-ACCESS MODAL (also accessible pre-PIN) -->
+<!-- REQUEST-ACCESS MODAL -->
 <div class="modal-backdrop" id="request-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal-card">
     <div id="modal-form-state">
@@ -411,7 +393,7 @@ window.GUDMUNDR_CONFIG = {
 </div>
 
 <script>
-/* Guðmundr home · PIN gate · redirects to /beta.html on unlock */
+/* Guðmundr home · public landing · sign-in through the Gudmundr Gateway */
 (function () {
   'use strict';
 
@@ -457,81 +439,14 @@ window.GUDMUNDR_CONFIG = {
     }
     tick();
   }
-  const pinSub = document.getElementById('pin-subline');
-  rotateWithSchedule(pinSub);
+  const landingSub = document.getElementById('landing-subline');
+  rotateWithSchedule(landingSub);
 
-  // ── PIN gate · shared shared beta gate (10012026) + personal PINs ──
-  // PIN_ENTRIES · array of {hash, kind, expires_days}. Personal PINs
-  // carry a TTL; shared beta PIN persists 30 days like the earlier design.
-  const PIN_ENTRIES = [
-    { hash: 'ed37b6d63a76a63d15cc76443c8b3a3f2c67e05dc9fb4dd0bb7c9a97ab30f5fb', kind: 'shared', ttl_days: 30 },
-    // CAW · personal · issued 2026-09-24 · expires 15 days ("GmB.SPK5p.x1mRL.")
-    { hash: '63bd5839662603c7fbf6dab00279f1f71753445314f333a498784c2e8e9e72b3', kind: 'personal', ttl_days: 15,
-      email: 'charles.a.wilson@gudmundr.com', issued_at: '2026-09-24' },
-    // NDW · personal · issued 2026-10-09 · 30-day TTL ("92880NDW")
-    { hash: '9cff53faf0b73e6cabfc3bc2fe659b5a5eeafff05c6319114a8789d422e11550', kind: 'personal', ttl_days: 30,
-      label: 'NDW', issued_at: '2026-10-09' }
-  ];
-  const UNLOCK_KEY = 'gudmundr.unlocked_at';
-  const UNLOCK_KIND = 'gudmundr.unlocked_kind';
-  const UNLOCK_EXPIRES = 'gudmundr.unlocked_expires_at';
-  const ATTEMPT_KEY = 'gudmundr.pin_attempts';
-  const LOCKOUT_KEY = 'gudmundr.pin_lockout_until';
-  const MAX_ATTEMPTS = 5;
-  const LOCKOUT_MS = 15 * 60 * 1000;
-  const BETA_URL = '/beta.html';
-
-  async function sha256Hex(str) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-  }
-  function isUnlocked() {
-    const at = parseInt(localStorage.getItem(UNLOCK_KEY) || '0', 10);
-    const exp = parseInt(localStorage.getItem(UNLOCK_EXPIRES) || '0', 10);
-    if (!at) return false;
-    if (exp && Date.now() >= exp) return false;
-    return true;
-  }
-  function inLockout() {
-    const until = parseInt(localStorage.getItem(LOCKOUT_KEY) || '0', 10);
-    return until && Date.now() < until;
-  }
-  function goBeta() { window.location.href = BETA_URL; }
-
-  async function tryPin(e) {
-    e.preventDefault();
-    const gate = document.getElementById('pin-gate');
-    const input = document.getElementById('pin-input');
-    const msg = document.getElementById('pin-msg');
-    if (inLockout()) {
-      const mins = Math.ceil((parseInt(localStorage.getItem(LOCKOUT_KEY), 10) - Date.now()) / 60000);
-      msg.textContent = `Too many attempts. Try again in ${mins} min.`; msg.classList.add('err'); return;
-    }
-    const pin = input.value.trim(); if (!pin) return;
-    const hash = await sha256Hex(pin);
-    const match = PIN_ENTRIES.find(e => e.hash === hash);
-    if (match) {
-      const now = Date.now();
-      const expiresAt = now + (match.ttl_days * 24 * 3600 * 1000);
-      localStorage.setItem(UNLOCK_KEY, String(now));
-      localStorage.setItem(UNLOCK_KIND, match.kind);
-      localStorage.setItem(UNLOCK_EXPIRES, String(expiresAt));
-      localStorage.removeItem(ATTEMPT_KEY);
-      localStorage.removeItem(LOCKOUT_KEY);
-      goBeta(); return;
-    }
-    const attempts = parseInt(localStorage.getItem(ATTEMPT_KEY) || '0', 10) + 1;
-    localStorage.setItem(ATTEMPT_KEY, String(attempts));
-    gate.classList.add('shake'); setTimeout(() => gate.classList.remove('shake'), 500);
-    input.value = '';
-    if (attempts >= MAX_ATTEMPTS) {
-      localStorage.setItem(LOCKOUT_KEY, String(Date.now() + LOCKOUT_MS));
-      localStorage.removeItem(ATTEMPT_KEY);
-      msg.textContent = 'Too many attempts. Locked for 15 min.'; msg.classList.add('err');
-    } else {
-      msg.textContent = `Incorrect. ${MAX_ATTEMPTS - attempts} attempts remaining.`; msg.classList.add('err');
-    }
-  }
+  // ── Sign in · Gudmundr Gateway via the beta portal ─────────────────
+  // PORTAL_URL is the apps host root. Swap to 'https://apps.gudmundr.com'
+  // once that DNS record serves the portal over TLS.
+  const PORTAL_URL = 'https://gudmundr-apps-production.up.railway.app';
+  document.getElementById('signinBtn').href = PORTAL_URL + '/auth/gateway/start?next=%2F';
 
   // ── Request modal ────────────────────────────────────────────────────
   const CONFIG = window.GUDMUNDR_CONFIG || {};
@@ -642,11 +557,6 @@ window.GUDMUNDR_CONFIG = {
     }
   });
 
-  document.addEventListener('DOMContentLoaded', () => {
-    if (isUnlocked()) { goBeta(); return; }
-    document.getElementById('pin-form').addEventListener('submit', tryPin);
-    document.getElementById('pin-input').focus();
-  });
 })();
 </script>
 </body>
